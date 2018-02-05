@@ -69,13 +69,16 @@ class Matrix(object):
             raise(NotImplementedError, "inversion not implemented for matrices larger than 2x2.")
 
         # TODO - your code here
-        
+
 
     def T(self):
         """
         Returns a transposed copy of this Matrix.
         """
         # TODO - your code here
+        m = self.grid
+        return [[m[a][b] for a in range(len(m))] for b in range(m[0])]
+        
 
     def is_square(self):
         return self.h == self.w
