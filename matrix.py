@@ -1,14 +1,19 @@
 import math
 from math import sqrt
 import numbers
+from copy import copy
 
 def zeroes(height, width):
         """
         Creates a matrix of zeroes.
         """
-        g = [[0.0 for _ in range(width)] for __ in range(height)]
+        g = [[0.0 for _ in range(width)] for _ in range(height)]
         return Matrix(g)
-
+def zeroeslist(height, width):
+        """
+        Create a list of zeros
+        """
+        return [[0.0 for _ in range(width)] for _ in range(height)]
 def identity(n):
         """
         Creates a n x n identity matrix.
@@ -25,7 +30,7 @@ class Matrix(object):
         self.g = grid
         self.h = len(grid)
         self.w = len(grid[0])
-
+        self.EMPTY = 0
     #
     # Primary matrix math methods
     #############################
@@ -83,6 +88,7 @@ class Matrix(object):
     def is_square(self):
         return self.h == self.w
 
+
     #
     # Begin Operator Overloading
     ############################
@@ -121,6 +127,12 @@ class Matrix(object):
         #   
         # TODO - your code here
         #
+        tmp = zeroeslist(self.h, self.w)
+        for i in range(self.h):
+            for j in range(self.w):
+                tmp[i][j] = self.g[i][j] + other.g[i][j]
+        return Matrix(tmp)
+
 
     def __neg__(self):
         """
@@ -137,6 +149,15 @@ class Matrix(object):
         #   
         # TODO - your code here
         #
+        if self.h == self.EMPTY and self.w == self.EMPTY:
+            return Matrix(self.g)
+        
+        tmp = zeroeslist(self.h, self.w)
+        for i in range(self.h):
+            for j in range(self.w):
+                tmp[i][j] = -self.g[i][j]
+
+        return Matrix(tmp)
 
     def __sub__(self, other):
         """
@@ -145,6 +166,15 @@ class Matrix(object):
         #   
         # TODO - your code here
         #
+        if self.h != other.h or self.w != other.w:
+            raise(ValueError, "Matrices can only be subbed if the dimensions are the same")
+        
+        tmp = zeroeslist(self.h, self.w)
+        for i in range(self.h):
+            for j in range(self.w):
+                tmp[i][j] = self.g[i][j] - other.g[i][j]
+
+        return Matrix(tmp)
 
     def __mul__(self, other):
         """
@@ -172,3 +202,14 @@ class Matrix(object):
             # TODO - your code here
             #
             
+
+
+## Test code
+m1 = Matrix([[1,2],[3,4]])
+m2 = Matrix([[2,2],[3,3]])
+
+m3 = m1 + m2
+
+
+print -m1
+print m1
