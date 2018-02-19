@@ -155,7 +155,7 @@ class Matrix(object):
         tmp = zeroeslist(self.h, self.w)
         for i in range(self.h):
             for j in range(self.w):
-                tmp[i][j] = -self.g[i][j]
+                tmp[i][j] = -float(self.g[i][j])
 
         return Matrix(tmp)
 
@@ -183,6 +183,26 @@ class Matrix(object):
         #   
         # TODO - your code here
         #
+        if isinstance(other, int):
+            tmp = zeroeslist(self.h, self.w)
+            for i in range(self.h):
+                for j in range(self.w):
+                    tmp = self.g[i][j] * other
+            return tmp
+
+        if self.w == other.h:
+            tmp = zeroeslist(self.h, other.w)
+
+            for i in range(self.h):
+                for j in range(other.w):
+                    p = self.w
+                    tmpSum = 0
+                    for k in range(p):
+                        tmpSum += self.g[i][k]*other.g[k][j]
+                    tmp[i][j] = tmpSum
+            return Matrix(tmp)
+        else:
+            raise(ValueError, "Matrixes are not compatible")
 
     def __rmul__(self, other):
         """
@@ -197,19 +217,21 @@ class Matrix(object):
           0.0  2.0
         """
         if isinstance(other, numbers.Number):
-            pass
             #   
             # TODO - your code here
             #
-            
-
+            tmp = zeroeslist(self.h, self.w)
+            for i in range(self.h):
+                for j in range(self.w):
+                    tmp[i][j] = float(other) * self.g[i][j]
+            return Matrix(tmp)
 
 ## Test code
-m1 = Matrix([[1,2],[3,4]])
-m2 = Matrix([[2,2],[3,3]])
+m1 = Matrix([[1,6],[9,3]])
+m2 = Matrix([[0,-1],[-1,2]])
 
-m3 = m1 + m2
+m3 = 2 * m2
 
+print m3
+print m2
 
-print -m1
-print m1
