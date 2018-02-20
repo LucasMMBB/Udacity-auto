@@ -3,6 +3,8 @@ from math import sqrt
 import numbers
 from copy import copy
 
+
+# Helper methods
 def zeroes(height, width):
         """
         Creates a matrix of zeroes.
@@ -11,7 +13,7 @@ def zeroes(height, width):
         return Matrix(g)
 def zeroeslist(height, width):
         """
-        Create a list of zeros
+        Create a list of zeroes
         """
         return [[0.0 for _ in range(width)] for _ in range(height)]
 def identity(n):
@@ -72,8 +74,26 @@ class Matrix(object):
             raise(ValueError, "Non-square Matrix does not have an inverse.")
         if self.h > 2:
             raise(NotImplementedError, "inversion not implemented for matrices larger than 2x2.")
-
         # TODO - your code here
+        
+        if self.h == 1:
+        	k = float(self.g[0][0])
+        	if k == 0:
+        		raise(ValueError, "This Matrix is not inversed")
+        	return Matrix([[1 / k]])
+        k = float(self.g[0][0]*self.g[1][1] - self.g[1][0]*self.g[0][1])
+        
+        if k == 0:
+        	raise(ValueError, "This Matrix is singular")
+
+        k = 1 / k
+        tmp = zeroeslist(2, 2)
+        tmp[0][0] = k*self.g[1][1]
+        tmp[1][1] = k*self.g[0][0]
+        tmp[1][0] = -k*self.g[1][0]
+        tmp[0][1] = -k*self.g[0][1]
+
+        return Matrix(tmp)
 
 
     def T(self):
@@ -81,8 +101,8 @@ class Matrix(object):
         Returns a transposed copy of this Matrix.
         """
         # TODO - your code here
-        m = self.grid
-        return [[m[a][b] for a in range(len(m))] for b in range(m[0])]
+        m = self.g
+        return Matrix([[m[a][b] for a in range(self.h)] for b in range(self.w)])
         
 
     def is_square(self):
@@ -225,13 +245,3 @@ class Matrix(object):
                 for j in range(self.w):
                     tmp[i][j] = float(other) * self.g[i][j]
             return Matrix(tmp)
-
-## Test code
-m1 = Matrix([[1,6],[9,3]])
-m2 = Matrix([[0,-1],[-1,2]])
-
-m3 = 2 * m2
-
-print m3
-print m2
-
