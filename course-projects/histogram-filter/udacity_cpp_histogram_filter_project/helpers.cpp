@@ -36,6 +36,21 @@ vector< vector<float> > normalize(vector< vector <float> > grid) {
 	vector< vector<float> > newGrid;
 
 	// todo - your code here
+        float total = 0.0;
+
+        for(int i = 0; i < grid.size(); i++){
+            for(int j = 0; j < grid[0].size(); j++){
+                total += grid[i][j];
+            }
+        }
+
+        for(int i = 0; i < grid.size(); i++){
+            vector<float> tmp;
+            for(int j = 0; j < grid[0].size(); j++){
+                tmp.push_back(grid[i][j]/total);
+            }
+            newGrid.push_back(tmp);
+        }
 
 	return newGrid;
 }
