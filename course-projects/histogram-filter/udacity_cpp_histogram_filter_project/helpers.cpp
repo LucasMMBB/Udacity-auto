@@ -93,7 +93,37 @@ vector < vector <float> > blur(vector < vector < float> > grid, float blurring) 
 	vector < vector <float> > newGrid;
 	
 	// your code here
+        int height = grid.size();
+        int width = grid[0].size();
+        float grid_val;
 
+        float center_prop = 1.0 - blurring;
+        float corner_prop = blurring / 12.0;
+        float adjacent_prop = blurring / 6.0;
+
+        float mult;
+        int new_i;
+        int new_j;
+
+        vector< vector<float> > window = {
+                                            {corner_prop, adjacent_prop, corner_prop},
+                                            {adjacent_prop, center_prop, adjacent_prop},
+                                            {corner_prop, adjacent_prop, corner_prop}
+                                          };
+        for(int i=0; i<height; i++){
+            for(int j=0; j<width; j++){
+                grid_val = grid[i][j];
+
+                for(int dx=-1; dx<2; dx++){
+                    for(int dy=-1; dy<2; dy++){
+                        mult = window[dx + 1][dy +1];
+                        new_i = (i + dy) % height;
+                        new_j = (j + dx) % width;
+                        newGrid[new_i][new_j] += mult * grid_val;
+                    }
+                }
+            }
+        }
 	return normalize(newGrid);
 }
 
