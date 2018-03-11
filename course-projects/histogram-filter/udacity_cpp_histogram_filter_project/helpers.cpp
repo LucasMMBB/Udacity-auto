@@ -123,9 +123,9 @@ vector < vector <float> > blur(vector < vector <float> > grid, float blurring) {
                 for(int dx = -1; dx < 2; dx++){
                     for(int dy = -1; dy < 2; dy++){
                         mult = window[dx + 1][dy +1];
-                        new_i = (i + dy) % height;
-                        new_j = (j + dx) % width;
-                        newGrid[abs(new_i)][abs(new_j)] += mult * grid_val;
+                        new_i = (height + i + dy) % height;
+                        new_j = (width + j + dx) % width;
+                        newGrid[new_i][new_j] += mult * grid_val;
                     }
                 }
             }
