@@ -42,6 +42,19 @@ vector< vector <float> > initialize_beliefs(vector< vector <char> > grid) {
 	vector< vector <float> > newGrid;
 
 	// your code here
+  int height = grid.size();
+  int width = grid[0].size();
+  int area = height * width;
+
+  float belief_per_cell = 1.0 / area;
+
+  for(int i = 0; i < height; i++){
+    vector <float> row;
+    for(int j = 0; j < width; j++){
+      row.push_back(belief_per_cell);
+    }
+    newGrid.push_back(row);
+  }
 	
 	return newGrid;
 }
@@ -89,9 +102,21 @@ vector< vector <float> > sense(char color,
 	float p_hit,
 	float p_miss) 
 {
-	vector< vector <float> > newGrid;
-
 	// your code here
+  int height = grid.size();
+  int width = grid[0].size();
+
+  vector < vector<float> > newGrid = zeros(height, width);
+
+  for(int i = 0; i < height; i++){
+    for(int j = 0; j < width; j++){
+      if(grid[i][j] == color){
+        newGrid[i][j] = beliefs[i][j] * p_hit;
+      }else{
+        newGrid[i][j] = beliefs[i][j] * p_miss;
+      }
+    }
+  }
 
 	return normalize(newGrid);
 }
@@ -139,9 +164,29 @@ vector< vector <float> > move(int dy, int dx,
 	float blurring) 
 {
 
-	vector < vector <float> > newGrid;
-
 	// your code here
+  int height = beliefs.size();
+  int width = beliefs[0].size();
+  
+  vector < vector<float> > new_G = zeros(height, width);
+  vector<float> row;
 
-	return blur(newGrid, blurring);
+  int new_i;
+  int new_j;
+
+  
+  for(int i = 0; i < height; i++){
+    row = beliefs[i];
+    for(int j = 0; j < width; j++){
+        new_j = (i + dy) % height;
+        new_i = (j + dx) % width;
+
+        new_j = abs(new_j);
+        new_i = abs(new_i);
+        
+        new_G[new_i][new_j] = row[j];
+    }
+  }
+
+	return blur(new_G, blurring);
 }
