@@ -1,4 +1,19 @@
 # helper funtions
+def isLeapYearMaoxu(year):
+    return (year%4==0 and year%100!=0) or (year%400==0)
+
+def daysInMonth(year, month):
+    if month == 1 or month ==3 or month == 5 \
+        or month == 7 or month == 8 or month == 10 \
+            or month == 12:
+                return 31
+    if month != 2:
+        return 30
+    if isLeapYearMaoxu(year):
+        return 29
+    else:
+        return 28
+
 def isDayBefore(date1, date2):
     year1, month1, day1 = date1
     year2, month2, day2 = date2
@@ -13,45 +28,17 @@ def isDayBefore(date1, date2):
     return False
 
 
-def isLeapYear(year):
-    return (year%4==0 and year%100!=0) or (year%400==0)
+
 
 def nextDate(date):
     year, month, day = date
-    longMonth = {1,3,5,7,8,10,12}
-    if day < 28:
-        day += 1
+    if day < daysInMonth(year, month):
+        return (year, month, day+1)
     else:
-        if month == 2:
-            if isLeapYear(year):
-                if day < 28:
-                    day += 1
-                else:
-                    day = 1
-            else:
-                if day < 29:
-                    day += 1
-                else:
-                    day = 1
-        else:
-            if day < 30:
-                day +=1
-            elif day == 30:
-                if month in longMonth:
-                    day += 1
-                else:
-                    day = 1
-            elif day == 31:
-                day = 1
-
-    if day == 1:
         if month < 12:
-            month += 1
+            return (year, month+1, 1)
         else:
-            month = 1
-            year += 1
-    return (year, month, day)
-        
+            return (year+1, 1, 1)        
 
 def days_between_dates(y1, m1, d1, y2, m2, d2):
     """
@@ -64,15 +51,10 @@ def days_between_dates(y1, m1, d1, y2, m2, d2):
     count = 0
     date1 = (y1, m1, d1)
     date2 = (y2, m2, d2)
-    print count
     assert not isDayBefore(date2, date1)
     while isDayBefore(date1, date2):
-        print date1
-        print date2
-        print "-------------------"
         date1 = nextDate(date1)
         count += 1
-    print count
     return count
 
 def test_days_between_dates():
